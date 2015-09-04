@@ -1,5 +1,7 @@
 # The Boolchain Project
 
+![Boolchain Logo](chain.png)
+
 The boolchain project was founded out of the need for a scalable IO module that can read in boolean logic. The resultant circuit board implements a serial interface that can be loaded simultaneously and shifted into a host one bit at a time.
 
 # Requirements
