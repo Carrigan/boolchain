@@ -6,12 +6,14 @@
 #define SET_LOAD(bc) bc->writer(BOOLSIG_DIRECTION, DIRECTION_LOAD)
 #define SET_SHIFT(bc) bc->writer(BOOLSIG_DIRECTION, DIRECTION_SHIFT)
 
+//! Zero all of the values out
 static void zero_bc(bc_t *p_bc) {
   p_bc->writer(BOOLSIG_ZERO, true);
   PULSE_CLOCK(p_bc);
   p_bc->writer(BOOLSIG_ZERO, false);
 }
 
+//! Read the next value out
 static bool bc_next(bc_t *p_bc) {
   PULSE_CLOCK(p_bc);
   p_bc->reader(BOOLSIG_RETURN);
