@@ -30,12 +30,13 @@ static char *test_initialize() {
 
     bcm_init(BC_SIZE / 2);
     result = boolchain_init(&bc, NULL, BC_SIZE, bcm_read, bcm_write);
-    mu_assert("init error - null buffer should fail", result != BOOLCHAIN_OK);
+    mu_assert("init error - null buffer should fail", result == BOOLCHAIN_NULL_BUFFER);
 
     result = bc_build(&bc, BC_SIZE + 1);
-    mu_assert("init error - exceeding the max bool count should fail", result != BOOLCHAIN_OK);
+    mu_assert("init error - exceeding the max bool count should fail", result == BOOLCHAIN_TOO_MANY_NODES);
 
     result = bc_build(&bc, BC_SIZE / 2);
+    printf("%d", result);
     mu_assert("init error - valid initialization failed", result == BOOLCHAIN_OK);    
     return 0;
 }
