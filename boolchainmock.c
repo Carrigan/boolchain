@@ -1,5 +1,6 @@
 #include "boolchainmock.h"
 #include "shift.h"
+#include <string.h>
 
 shift_t shift_registers[40];
 shift_chain_t shift_chain;
@@ -44,7 +45,7 @@ void bcm_write(bc_signal_t p_signal, bool p_value)
     }
 
     case BOOLSIG_DIRECTION: {
-      if (p_value) {
+      if (!p_value) {
         shift_chain_apply_signal(&shift_chain, microcontroller_output);
       } else {
         uint8_t i;
@@ -69,3 +70,4 @@ void bcm_set_data(bool *p_values, uint8_t p_count)
 {
   memcpy(sensor_data, p_values, p_count);
 }
+

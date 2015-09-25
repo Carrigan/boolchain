@@ -16,7 +16,7 @@ static void zero_bc(bc_t *p_bc) {
 //! Read the next value out
 static bool bc_next(bc_t *p_bc) {
   PULSE_CLOCK(p_bc);
-  p_bc->reader(BOOLSIG_RETURN);
+  return p_bc->reader(BOOLSIG_RETURN);
 }
 
 bc_error_t boolchain_init(
@@ -34,7 +34,10 @@ bc_error_t boolchain_init(
   p_boolchain->buffer = (bool *)p_buffer;
   p_boolchain->writer = p_write_function;
   p_boolchain->reader = p_read_function;
-  p_boolchain->count = 0;
+  p_boolchain->count = 1;
+
+  // Initialize the needed signals to a known state
+  SET_SHIFT(p_boolchain);
 
   // Find how many there are in the chain by zeroing everything, writing a 1, and
   // seeing how many pulses it takes to get it back.
@@ -59,7 +62,7 @@ void boolchain_capture(bc_t *p_boolchain)
   PULSE_CLOCK(p_boolchain);
   SET_SHIFT(p_boolchain);
   for(i = 0; i < p_boolchain->count; i++)
-    p_boolchain->buffer[p_boolchain->count - i] = bc_next(p_boolchain);
+    p_boolchain->buffer[p_boolchain->count - 1 - i] = bc_next(p_boolchain);
 }
 
 uint8_t boolchain_count(bc_t *p_boolchain)

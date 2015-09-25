@@ -1,5 +1,7 @@
 #include "shift.h"
 
+static void shift_chain_reconcile_signals(shift_chain_t *shift);
+
 void shift_apply_signal(shift_t *shift, bool p_signal)
 {
   shift->input = p_signal;
@@ -38,6 +40,8 @@ void shift_chain_pulse_clock(shift_chain_t *shift)
   for(i = 0; i < shift->count; i++) {
     shift_pulse_clock(&shift->shifts[shift->count - 1 - i]);
   }
+
+  shift_chain_reconcile_signals(shift);
 }
 
 bool shift_chain_get_output(shift_chain_t *shift)
@@ -50,5 +54,15 @@ void shift_chain_zero(shift_chain_t *shift)
   uint8_t i;
   for(i = 0; i < shift->count; i++) {
     shift_zero(&shift->shifts[i]); 
+  }
+
+  shift_chain_reconcile_signals(shift);
+}
+
+static void shift_chain_reconcile_signals(shift_chain_t *shift)
+{
+  uint8_t i;
+  for(i = 1; i < shift->count; i++) {
+    shift_apply_signal(&shift->shifts[i], shift_get_output(&shift->shifts[i-1]));
   }
 }
